@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌿 Recetas Naturales STP</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Portada -->
+  <section id="portada" class="portada" aria-label="Portada principal">
+    <img src="img/portada.jpg" alt="Belleza natural - portada" class="img-portada" loading="lazy">
+    <h1>🌿 <span id="bienvenidaTitulo">Bienvenido a Recetas Naturales STP</span> 🌿</h1>
+    <p id="bienvenidaSub">💚 Elige tu tipo de piel y descubre recetas caseras perfectas para ti 💚</p>
+    <button id="entrarBtn" aria-label="Entrar a la aplicación">Entrar a la App</button>
+    <footer class="creado-por">Creado por: <strong>STP J, L, R</strong> ✨</footer>
+  </section>
+
+  <!-- Barra superior -->
+  <header class="barra-superior oculto" id="barraSuperior" role="banner">
+    <h1 class="titulo-principal" id="tituloPrincipal">🌿 Belleza Casera 🌸</h1>
+    <div class="botones-opciones" role="toolbar" aria-label="Opciones de la app">
+      <button title="Cambiar tema" id="modoBtn" aria-label="Cambiar tema">🌙</button>
+      <button title="Música" id="musicaBtn" aria-label="Activar o pausar música">🎵</button>
+      <button title="Cambiar idioma" id="idiomaBtn" aria-label="Cambiar idioma">🇪🇸/🇬🇧</button>
+    </div>
+  </header>
+
+  <!-- Buscador inteligente -->
+  <div id="buscadorInteligente" class="buscador-inteligente oculto">
+    <input type="search" id="inputBuscadorInteligente" placeholder="¿Qué necesitas? Ej: acné, brillo cabello, piel seca..." autocomplete="off">
+    <button id="btnBuscarInteligente" aria-label="Buscar remedio">🔍</button>
+    <div id="resultadosBuscador"></div>
+  </div>
+
+  <!-- Controles de filtro y búsqueda -->
+  <section class="controles-superiores oculto" id="controlesSuperiores" aria-label="Filtrado y búsqueda">
+    <select id="filtroPiel" aria-label="Filtrar recetas por tipo de piel">
+      <option value="todas">Todas las pieles/zona</option>
+      <option value="grasa">Grasa</option>
+      <option value="seca">Seca</option>
+      <option value="mixta">Mixta</option>
+      <option value="sensible">Sensible</option>
+      <option value="labios">Labios</option>
+      <option value="cabello">Cabello</option>
+    </select>
+    <input type="search" id="busquedaReceta" placeholder="Buscar receta..." aria-label="Buscar receta por nombre o ingrediente" autocomplete="off">
+    <button id="añadirRecetaBtn" aria-label="Añadir receta personalizada">➕ Añadir receta</button>
+    <button id="añadirTestimonioBtn" aria-label="Añadir testimonio">💬 Testimonio</button>
+  </section>
+
+  <!-- Botones de recetas -->
+  <nav class="botones-recetas oculto" id="botonesRecetas" aria-label="Navegación de recetas" role="navigation">
+    <!-- Se llenan dinámicamente -->
+  </nav>
+
+  <!-- Contenedor de receta activa -->
+  <main id="contenedorRecetaActiva" class="contenedor-receta-activa oculto" aria-live="polite" aria-label="Recetas" tabindex="0"></main>
+
+  <!-- Acciones de receta -->
+  <div class="acciones-receta oculto" id="accionesReceta" role="group" aria-label="Descargar, compartir o marcar favorito">
+    <button id="descargarTxtBtn" aria-label="Descargar receta como texto">⬇️ TXT</button>
+    <button id="descargarPdfBtn" aria-label="Descargar receta como PDF">📄 PDF</button>
+    <button id="compartirBtn" aria-label="Compartir receta">🔗 Compartir</button>
+    <button id="favoritoBtn" aria-label="Agregar o quitar receta de favoritos">🤍 Favorito</button>
+  </div>
+
+  <!-- Nota de medidas -->
+  <div class="nota-medidas oculto" id="notaMedidas" aria-label="Medidas caseras">
+    📝 <strong>Medidas caseras:</strong><br>
+    • 1 cucharada = 15 ml<br>
+    • 1 cucharadita = 5 ml<br>
+    • 1 taza = 240 ml<br>
+    • 1/2 taza = 120 ml<br>
+    • 1/4 taza = 60 ml<br>
+    • 1 pizca = menos de 1/8 cucharadita
+  </div>
+
+  <!-- Pie legal -->
+  <p class="legal oculto" id="pieLegal">
+    ⚠️ Estas recetas son naturales y caseras. Consulta a un especialista si tienes dudas.
+  </p>
+  
+  <!-- Modal para añadir receta personalizada -->
+  <div id="modalPersonalizada" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="modalPersonalizadaTitulo">
+    <div class="modal-contenido">
+      <button class="modal-cerrar" id="cerrarPersonalizadaBtn" aria-label="Cerrar ventana">✖️</button>
+      <h2 id="modalPersonalizadaTitulo">➕ Nueva Receta Personalizada</h2>
+      <input id="nuevaTitulo" placeholder="Título" required aria-label="Título de la receta">
+      <input id="nuevaTipo" placeholder="Tipo de piel o zona (ej: grasa, seca, labios...)" required aria-label="Tipo de piel o zona">
+      <input id="nuevaImg" placeholder="URL de imagen (opcional)" aria-label="URL de imagen">
+      <textarea id="nuevaIngredientes" placeholder="Ingredientes (separados por coma)" required aria-label="Ingredientes"></textarea>
+      <textarea id="nuevaPreparacion" placeholder="Preparación (separado por punto y coma)" required aria-label="Preparación"></textarea>
+      <textarea id="nuevaConsejos" placeholder="Consejos (separados por punto y coma)" aria-label="Consejos"></textarea>
+      <button id="guardarPersonalizadaBtn" aria-label="Guardar receta personalizada">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Modal de testimonio -->
+  <div id="modalTestimonio" class="modal oculto" role="dialog" aria-modal="true" aria-labelledby="modalTestimonioTitulo">
+    <div class="modal-contenido">
+      <button class="modal-cerrar" id="cerrarTestimonioBtn" aria-label="Cerrar ventana">✖️</button>
+      <h2 id="modalTestimonioTitulo">💬 Nuevo Testimonio</h2>
+      <input id="nombreTestimonio" placeholder="Tu nombre (opcional)" aria-label="Nombre">
+      <textarea id="textoTestimonio" placeholder="¡Cuéntanos tu experiencia!" required aria-label="Texto de testimonio"></textarea>
+      <button id="guardarTestimonioBtn" aria-label="Guardar testimonio">Guardar</button>
+    </div>
+  </div>
+
+  <!-- Lista de testimonios -->
+  <div id="testimonios" class="testimonios oculto" aria-label="Testimonios de usuarios">
+    <h2>💬 Testimonios</h2>
+    <ul id="listaTestimonios"></ul>
+  </div>
+
+  <!-- Toast de feedback -->
+  <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
+
+  <!-- Música suave -->
+  <audio id="musicaFondo" loop>
+    <source src="audio/suave.mp3" type="audio/mpeg" />
+  </audio>
+  <script src="script.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) { navigator.serviceWorker.register('service-worker.js'); }
+  </script>
+</body>
+</html>
